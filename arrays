@@ -1,0 +1,52 @@
+#include "main.h"
+
+/**
+ * main - A simple shell program
+ * @argc: integer representing the number of arguments
+ * passed to the shell
+ * @argv: pointer to the arrays of string that represents the arguments
+ * passed to the shell
+ *
+ * Return: 0
+ */
+
+int main(__attribute__((unused)) int argc, __attribute__((unused)) char **argv)
+{
+	char *line, **args;
+	int int_mode, exit_flag;
+
+	exit_flag = 1;
+
+	signal(SIGINT, ctrl_c);
+
+	while (exit_flag)
+	{
+		int_mode = isatty(STDIN_FILENO);
+
+		if (int_mode)
+			write(STDOUT_FILENO, "daisy-dawn@Daisy-Dawn20:~/$ ", 28);
+		line = readline();
+
+		if (!line)
+			break;
+		args = tokenize(line);
+
+		if (!args)
+		{
+			write(STDOUT_FILENO, "Error 3", 8);
+			exit(EXIT_FAILURE);
+		}
+		if (_strcmp(args[0], "env") == 0)
+			env();
+		else if (_strcmp(args[0], "exit") == 0)
+		{
+			exit_flag = 0;
+			quit();
+		}
+		else
+			execute(args[0]. args, NULL, argv[0]);
+		free(args);
+		free(line);
+	}
+	return (0);
+}
